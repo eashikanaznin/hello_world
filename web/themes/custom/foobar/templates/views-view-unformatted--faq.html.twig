@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{# {% for row in rows %} #}
+{#   <h3>{{ dump(row.content['#row']._entity.title.value) }}</h3> #}
+{# {% endfor %} #}
+{# {{ rows }} #}
+<div class="tab-pane fade show {{ active_clss }} " id="{{ title|striptags|trim|replace({' ': ''}) }}">
+  <div id="oneaccordion" class="myaccordion">
+
+
+    {% set qid = 0 %}
+    {% for row in rows %}
+      {% set qid = qid + 1 %}
+      {% set clsname='' %}
+      {% if qid > 4 %}
+        {% set clsname='visually-hidden' %}
+      {% endif %}
+
+
+      <div class="card content-tween-item {{ clsname }}">
+        <div class="card-header text-left collapsed" data-toggle="collapse"
+             data-target="#{{ title|striptags|trim|replace({' ': ''}) }}{{ qid }}">
+          <div class="row">
+            <div class="col my-auto">
+              <h3>{{ row.content['#row']._entity.title.value }}</h3>
+              {#              <h3>{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }}</h3> #}
+            </div>
+            <div class="col-auto text-right mb-auto">
+              <div class="cardicons"><i class="icon-plus"></i></div>
+            </div>
+          </div>
+        </div>
+        <div id="{{ title|striptags|trim|replace({' ': ''}) }}{{ qid }}" class="collapse" data-parent="#oneaccordion">
+          <div class="card-body">
+            {{ row.content['#row']._entity.body.value }}
+          </div>
+        </div>
+      </div>
+
+    {% endfor %}
+    {% if qid  > 4 %}
+      <br/>
+      <button class="btn btn-primary faq-load" type="button">Load More</button>
+    {% endif %}
+    {#    {% if loop.last and title %} #}
+
+  </div>
+</div>
+
+
+{# {% endif %} #}
+
+

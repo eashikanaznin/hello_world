@@ -1,0 +1,65 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+<div class="hero-banner">
+
+  {% for row in rows %}
+
+    {% set stripped_url_img_mob = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_image }}'] | striptags | trim %}
+    {% set stripped_url_img_desk = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_image_1 }}'] | striptags | trim %}
+    {% set stripped_url_vid = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_video_file }}'] | striptags | trim %}
+    {% set contype = row.content['#row']._entity.field_mobile_banner.entity.bundle.value[0]['target_id'] %}
+    {% if contype == "video" %}
+      {% set vdo_class='videoslideimg' %}
+    {% endif %}
+    <div class="hero-banner-items {{ vdo_class }}">
+      <div class="videobgoverlay"></div>
+      <div class="bgoverlay2"></div>
+
+
+      {% if contype == "video" %}
+        <video playsinline webkit-playsinline autoplay loop="true" muted width="1280" height="720" class="videoplay">
+          <source type="video/mp4"
+                  src="{{ stripped_url_vid }}">
+        </video>
+      {% endif %}
+      {% if contype == "image" %}
+        <picture>
+          <img class="banner-img" src="{{ stripped_url_img_desk }}"
+               alt="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }}">
+          <img class="banner-img-mob" src="{{ stripped_url_img_desk }}"
+               alt="Scam Alert">
+        </picture>
+      {% endif %}
+      <div class="container textcover">
+        <div class="row">
+          <div class="col-12 mx-auto">
+            {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ body }}'] }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<a href="#content" class="jscroll-trigger mianBannerarrowdown anibounce"><img
+    src="{{ base_path ~ directory }}/img/arrow-down.png" alt="arrow down"></a>
+
+
